@@ -131,15 +131,15 @@ class BaseGraph:
     def show(self, zones):
         # x_values = gather only x_values from our zones
         # y_values = gather only y_values from our zones
-        x_values, y_values = self.xy_values(zones)
-        plt.plot(x_values, y_values, '.')
+        x_values, y_values = self._xy_values(zones)
+        plt.plot(x_values, y_values, 'mx')
         plt.xlabel(self.x_label)
         plt.ylabel(self.y_label)
         plt.title(self.title)
         plt.grid(self.show_grid)
         plt.show()
 
-    def xy_values(self, zones):
+    def _xy_values(self, zones):
         raise NotImplementedError
 
 
@@ -151,7 +151,7 @@ class AgreeablenessGraph(BaseGraph):
         self.x_label = "population density"
         self.y_label = "agreeableness"
 
-    def xy_values(self, zones):
+    def _xy_values(self, zones):
         x_values = [zone.population_density() for zone in zones]
         y_values = [zone.average_agreeableness() for zone in zones]
         return x_values, y_values
@@ -165,13 +165,14 @@ class IncomesGraph(BaseGraph):
         self.x_label = "Age"
         self.y_label = "Income"
 
-    def xy_values(self, zones):
+    def _xy_values(self, zones):
         x_values = [zone.average_age() for zone in zones]
         y_values = [zone.average_income() for zone in zones]
         return x_values, y_values
 
 
 def main():
+
     for agent_attributes in json.load(open("agents-100k.json")):
         latitude = agent_attributes.pop("latitude")
         longitude = agent_attributes.pop("longitude")
